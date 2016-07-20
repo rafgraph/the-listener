@@ -70,7 +70,8 @@ addListener(el2,
     mouseleave: (e) => (...),
 
     // separate handlers for mousemove and touchmove
-    mousemove: (e) => (...),
+    // both will be called during the capture phase and will be set as passive listeners
+    'mousemove capture passive': (e) => (...),
     'touchmove capture passive': (e) => (...),
 
     // never set pointermove listener
