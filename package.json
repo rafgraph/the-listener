@@ -1,0 +1,21 @@
+{
+  "name": "the-listener",
+  "version": "0.0.0",
+  "description": "Set listeners for mouse, touch and pointer events without conflicts",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafrex/the-listener.git"
+  },
+  "keywords": [
+    "event listener",
+    "touch",
+    "mouse"
+  ],
+  "author": "Rafael Pedicini <code@rafrex.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rafrex/the-listener/issues"
+  },
+  "homepage": "https://github.com/rafrex/the-listener#readme"
+}
