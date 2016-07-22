@@ -36,20 +36,24 @@ addListener(domElementTarget, objWithEventsAndFunctions);
  * then set the key as a space separated string with the multiple event types
  */
 const objWithEventsAndFunctions = {
-  'one or more events as space separated string': function(event){...},
+  'one or more events as space separated string': function(event) {...},
 
   // handler will be called for both mousedown and touchstart events,
-  'mousedown touchstart': function(event){...},
+  'mousedown touchstart': function(event) {...},
 
   // the click event handler is called for both mouse and touch 'clicks' without any delay
-  click: function(event){...},
+  click: function(event) {...},
 
   // add capture to the key string to have the handler called during
   // the capture phase instead of the bubbling phase
-  'mouseleave capture': function(event){...},
+  'mouseleave capture': function(event) {...},
 
   // add passive to the key string to set a passive event listener
-  'touchmove passive': function(event){...},
+  'touchmove passive': function(event) {...},
+
+  // can have multple handlers for the same event (e.g. a touchstart handler was also set above)
+  // and can set a listener with both capture and passive options
+  'touchstart capture passive': function(event) {...}
 
   // prevent pointermove listener from being set, will still set other pointer listeners
   // note that the corresponding mousemove listener won't be set
@@ -87,8 +91,10 @@ addListener(el2,
 
 - `the-listener` never calls `preventDefault()`, so it won't effect anything else in your app (you can call `preventDefault()` in side of your handlers if desired).
 
-- Pointer event listeners are only set when the device is touch capable but doesn't support the touch events api. In this case, pointer event listeners are set instead of mouse and touch event listeners (in all other cases, even if the device supports pointer events, only the mouse and touch event listeners are set). If you don't want a specific type of pointer event listener to be set, e.g. `pointermove`, then set `pointermove: false` in the options object. Note that the corresponding mouse event listener will not be set, e.g. the `mousemove` listener will not be set.
+- Pointer event listeners are only set when the device is touch capable but doesn't support the touch events api. In this case, pointer event listeners are set instead of mouse and touch event listeners (in all other cases, even if the device supports pointer events, only the mouse and touch event listeners are set). Note that if the `pointerType` is `pen` or `touch` then the touch event handler will be called, and if the `pointerType` is `mouse` then the mouse event handler will be called. If you don't want a specific type of pointer event listener to be set, e.g. `pointermove`, then set `pointermove: false` in the options object. Note that the corresponding mouse event listener will not be set, e.g. the `mousemove` listener will not be set.
 
 - Set passive event listeners by adding `passive` to the key string. Not all browsers support passive event listeners and `the-listener` will only set a listener as passive if the browser supports it, otherwise the listener will be set as a normal listener. See the [passive event listener explained](https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md) for more information.
 
 - Set capture phase listeners by adding `capture` to the key string.
+
+- If there are multiple handlers for the same event, i.e. the same event appears in multiple keys of the options object, then `the-listener` will add multiple event listeners to the DOM element for that event (and all the handlers will get called when the event fires).
