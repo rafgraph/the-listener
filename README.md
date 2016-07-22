@@ -1,6 +1,6 @@
 # The Listener
 
-Set listeners for mouse, touch and pointer events. Pass in a DOM element along with the mouse and touch event handlers, and `the-listener` will only set listeners for the events that correspond to the device's capabilities, and will automatically set pointer event listeners if needed (uses [`detect-it`](https://github.com/rafrex/detect-it) to determine device capabilities).
+Set listeners for mouse, touch and pointer events. Pass in a DOM object along with the mouse and touch event handlers, and `the-listener` will only set listeners for the events that correspond to the device's capabilities, and will automatically set pointer event listeners if needed (uses [`detect-it`](https://github.com/rafrex/detect-it) to determine device capabilities).
 
 - If it's a mouse only device, then only mouse event listeners are set.
 - If it's a touch only device, then only touch event listeners are set.
@@ -21,13 +21,14 @@ import addListener from 'the-listener';
 ```
 ```javascript
 /**
- * addListener() sets listeners on the domElementTarget
- * based on the options in objWithEventsAndFunctions
+ * addListener() sets listeners on the target
+ * based on the options in eventsAndHandlers
  *
- * @param {DOM Element} domElementTarget
- * @param {Object} objWithEventsAndFunctions
+ * @param {DOM Object} target (required)
+ * @param {Object} eventsAndHandlers (required)
+ * @param {Object} pointerOptions (optional)
  */
-addListener(domElementTarget, objWithEventsAndFunctions);
+addListener(target, eventsAndHandlers, pointerOptions);
 ```
 ```javascript
 /*
@@ -35,7 +36,7 @@ addListener(domElementTarget, objWithEventsAndFunctions);
  * if the same function should be called for multiple event types,
  * then set the key as a space separated string with the multiple event types
  */
-const objWithEventsAndFunctions = {
+const eventsAndHandlers = {
   'one or more events as space separated string': function(event) {...},
 
   // handler will be called for both mousedown and touchstart events,
@@ -54,9 +55,11 @@ const objWithEventsAndFunctions = {
   // can have multple handlers for the same event (e.g. a touchstart handler was also set above)
   // and can set a listener with both capture and passive options
   'touchstart capture passive': function(event) {...}
+}
 
-  // prevent pointermove listener from being set, will still set other pointer listeners
-  // note that the corresponding mousemove listener won't be set
+// prevent pointermove listener from being set, will still set other pointer listeners
+// note that the corresponding mousemove listener won't be set
+const pointerOptions = {
   pointermove: false,
 }
 ```
@@ -64,9 +67,9 @@ const objWithEventsAndFunctions = {
 #### Examples
 ```javascript
 
-addListener(el1, { click: (e) => alert(e) });
+addListener(target1, { click: (e) => alert(e) });
 
-addListener(el2,
+addListener(target2,
   {
     'mousedown touchstart': (e) => (...),
     'mouseup touchend': (e) => (...),
@@ -77,10 +80,10 @@ addListener(el2,
     // both will be called during the capture phase and will be set as passive listeners
     'mousemove capture passive': (e) => (...),
     'touchmove capture passive': (e) => (...),
+  },
 
-    // never set pointermove listener
-    pointermove: false,
-  }
+  // never set pointermove listener
+  { pointermove: false }
 );
 ```
 
@@ -91,10 +94,10 @@ addListener(el2,
 
 - `the-listener` never calls `preventDefault()`, so it won't effect anything else in your app (you can call `preventDefault()` in side of your handlers if desired).
 
-- Pointer event listeners are only set when the device is touch capable but doesn't support the touch events api. In this case, pointer event listeners are set instead of mouse and touch event listeners (in all other cases, even if the device supports pointer events, only the mouse and touch event listeners are set). Note that if the `pointerType` is `pen` or `touch` then the touch event handler will be called, and if the `pointerType` is `mouse` then the mouse event handler will be called. If you don't want a specific type of pointer event listener to be set, e.g. `pointermove`, then set `pointermove: false` in the options object. Note that the corresponding mouse event listener will not be set, e.g. the `mousemove` listener will not be set.
+- Pointer event listeners are only set when the device is touch capable but doesn't support the touch events api. In this case, pointer event listeners are set instead of mouse and touch event listeners (in all other cases, even if the device supports pointer events, only the mouse and touch event listeners are set). Note that if the `pointerType` is `pen` or `touch` then the touch event handler will be called, and if the `pointerType` is `mouse` then the mouse event handler will be called. If you don't want a specific type of pointer event listener to be set, e.g. `pointermove`, then add a `pointerOptions` object with `pointermove: false` as the third argument to the `addListener()` function. Note that the corresponding mouse event listener will not be set, e.g. the `mousemove` listener will not be set.
 
-- Set passive event listeners by adding `passive` to the key string. Not all browsers support passive event listeners and `the-listener` will only set a listener as passive if the browser supports it, otherwise the listener will be set as a normal listener. See the [passive event listener explained](https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md) for more information.
+- Set passive event listeners by adding `passive` to the key string. Not all browsers support passive event listeners and `the-listener` will only set a listener as passive if the browser supports it, otherwise the listener will be set as a normal listener. See the [passive event listener explainer](https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md) for more information.
 
 - Set capture phase listeners by adding `capture` to the key string.
 
-- If there are multiple handlers for the same event, i.e. the same event appears in multiple keys of the options object, then `the-listener` will add multiple event listeners to the DOM element for that event (and all the handlers will get called when the event fires).
+- If there are multiple handlers for the same event, i.e. the same event appears in multiple keys of the `eventsAndHandlers` object, then `the-listener` will add multiple event listeners to the target for that event (and all the handlers will get called when the event fires).
