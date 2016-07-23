@@ -33,7 +33,8 @@ function getListenerType() {
 }
 
 function getListenerOptions(passive, capture) {
-
+  if (!passive || !hasPassive) return capture;
+  return { capture, passive };
 }
 
 function parseKey(key) {
