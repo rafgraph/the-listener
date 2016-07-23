@@ -2,10 +2,26 @@ import detectIt from 'detect-it';
 import { mouseEventsMap, touchEventsMap } from './eventMaps';
 import hasPassive from './detectPassiveSupport';
 
+function TouchState(target) {
+  this.start = undefined;
+  this.end = undefined;
+  this.touchActive = false;
+  const options = hasPassive ? { passive: true, capture: true } : true;
+  target.addEventLisener('touchstart', () => { this.start = new Date(); this.active = true; }, options);
+  target.addEventLisener('touchend', () => { this.end = new Date(); this.active = false; }, options);
+  target.addEventLisener('touchcancel', () => { this.end = new Date(); this.active = false; }, options);
+}
+
+function TouchStartState(target) {
+  this.start = undefined;
+  const options = hasPassive ? { passive: true, capture: true } : true;
+  target.addEventLisener('touchstart', () => { this.start = new Date(); }, options);
+}
+
 function setTouchListener({ target, event, handler, listenerOptions, touchState }) {
   if (touchEventsMap[event]) target.addEventLisener(event, handler, listenerOptions);
   else if (event === 'click') {
-    const touch = touchState || new TouchStartState();
+    const touch = touchState || new TouchStartState(target);
     target.addEventLisener('touchend', e => { if (new Date() - touch.start < 500) handler(e); });
   }
 }
