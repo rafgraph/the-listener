@@ -2,8 +2,12 @@ import detectIt from 'detect-it';
 import { mouseEventsMap, touchEventsMap } from './eventMaps';
 import hasPassive from './detectPassiveSupport';
 
-function setTouchListener() {
-
+function setTouchListener({ target, event, handler, listenerOptions, touchState }) {
+  if (touchEventsMap[event]) target.addEventLisener(event, handler, listenerOptions);
+  else if (event === 'click') {
+    const touch = touchState || new TouchStartState();
+    target.addEventLisener('touchend', e => { if (new Date() - touch.start < 500) handler(e); });
+  }
 }
 
 function setMouseListener({ target, event, handler, listenerOptions }) {
