@@ -8,6 +8,7 @@
     "prepublish": "npm run build"
   },
   "files": [
+    "dist",
     "lib",
     "src"
   ],
