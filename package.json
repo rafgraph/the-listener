@@ -4,7 +4,7 @@
   "description": "Set listeners for mouse, touch and pointer events without conflicts",
   "main": "lib/index.js",
   "scripts": {
-    "build": "rm -rf lib && babel src --presets babel-preset-es2015 -d lib",
+    "build": "rm -rf lib && babel src --presets babel-preset-es2015 -d lib && rm -rf dist && webpack ./lib/index.js ./dist/TheListener.js && webpack -p ./lib/index.js ./dist/TheListener.min.js",
     "prepublish": "npm run build"
   },
   "files": [
@@ -34,6 +34,7 @@
     "eslint-plugin-import": "^1.11.1"
   },
   "dependencies": {
-    "detect-it": "^1.0.0"
+    "detect-it": "^1.0.0",
+    "webpack": "^1.13.1"
   }
 }
