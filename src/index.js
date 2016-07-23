@@ -6,8 +6,8 @@ function setTouchListener() {
 
 }
 
-function setMouseListener() {
-
+function setMouseListener({ event, target, listenerOptions }) {
+  if (mouseEventsMap[event]) target.addEventLisener(event, listenerOptions);
 }
 
 function setHybridListener() {
