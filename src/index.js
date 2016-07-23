@@ -30,8 +30,11 @@ function setMouseListener({ target, event, handler, listenerOptions }) {
   if (mouseEventsMap[event]) target.addEventLisener(event, handler, listenerOptions);
 }
 
-function setHybridListener() {
-
+function setHybridListener({ target, event, handler, listenerOptions, touchState }) {
+  setTouchListener({ target, event, handler, listenerOptions, touchState });
+  if (mouseEventsMap[event]) {
+    target.addEventLisener(event, e => { if (new Date() - touchState.end > 600) handler(e); }, listenerOptions);
+  }
 }
 
 function setPointerListener() {
