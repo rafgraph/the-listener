@@ -46,12 +46,13 @@ function setPointerListener({ target, event, handler, listenerOptions, pointerOp
     if (['mouse', 4].indexOf(e.pointerType) !== -1) return 'mouse';
     return undefined;
   }
+  const pfix = detectIt.pointerEventsPrefix;
   if (ptrMouseEvent === 'click' || ptrMouseEvent === 'dblclick') {
     target.addEventListener(ptrMouseEvent, handler, listenerOptions);
   } else if (ptrMouseEvent) {
-    target.addEventListener(ptrMouseEvent, e => { if (pointerType(e) === 'mouse') handler(e); }, listenerOptions);
+    target.addEventListener(pfix(ptrMouseEvent), e => { if (pointerType(e) === 'mouse') handler(e); }, listenerOptions);
   } else if (ptrTouchEvent) {
-    target.addEventListener(ptrTouchEvent, e => { if (pointerType(e) === 'touch') handler(e); }, listenerOptions);
+    target.addEventListener(pfix(ptrTouchEvent), e => { if (pointerType(e) === 'touch') handler(e); }, listenerOptions);
   }
 }
 
