@@ -37,8 +37,22 @@ function setHybridListener({ target, event, handler, listenerOptions, touchState
   }
 }
 
-function setPointerListener() {
-
+function setPointerListener({ target, event, handler, listenerOptions, pointerOptions }) {
+  const ptrTouchEvent = touchEventsMap[event];
+  const ptrMouseEvent = mouseEventsMap[event];
+  if (pointerOptions && (pointerOptions[ptrTouchEvent] === false || pointerOptions[ptrMouseEvent] === false)) return;
+  function pointerType(e) {
+    if (['touch', 2, 'pen', 3].indexOf(e.pointerType) !== -1) return 'touch';
+    if (['mouse', 4].indexOf(e.pointerType) !== -1) return 'mouse';
+    return undefined;
+  }
+  if (ptrMouseEvent === 'click' || ptrMouseEvent === 'dblclick') {
+    target.addEventLisener(ptrMouseEvent, handler, listenerOptions);
+  } else if (ptrMouseEvent) {
+    target.addEventLisener(ptrMouseEvent, e => { if (pointerType(e) === 'mouse') handler(e); }, listenerOptions);
+  } else if (ptrTouchEvent) {
+    target.addEventLisener(ptrTouchEvent, e => { if (pointerType(e) === 'touch') handler(e); }, listenerOptions);
+  }
 }
 
 function getListenerType() {
