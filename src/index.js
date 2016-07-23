@@ -7,33 +7,33 @@ function TouchState(target) {
   this.end = undefined;
   this.touchActive = false;
   const options = hasPassive ? { passive: true, capture: true } : true;
-  target.addEventLisener('touchstart', () => { this.start = new Date(); this.active = true; }, options);
-  target.addEventLisener('touchend', () => { this.end = new Date(); this.active = false; }, options);
-  target.addEventLisener('touchcancel', () => { this.end = new Date(); this.active = false; }, options);
+  target.addEventListener('touchstart', () => { this.start = new Date(); this.active = true; }, options);
+  target.addEventListener('touchend', () => { this.end = new Date(); this.active = false; }, options);
+  target.addEventListener('touchcancel', () => { this.end = new Date(); this.active = false; }, options);
 }
 
 function TouchStartState(target) {
   this.start = undefined;
   const options = hasPassive ? { passive: true, capture: true } : true;
-  target.addEventLisener('touchstart', () => { this.start = new Date(); }, options);
+  target.addEventListener('touchstart', () => { this.start = new Date(); }, options);
 }
 
 function setTouchListener({ target, event, handler, listenerOptions, touchState }) {
-  if (touchEventsMap[event]) target.addEventLisener(event, handler, listenerOptions);
+  if (touchEventsMap[event]) target.addEventListener(event, handler, listenerOptions);
   else if (event === 'click') {
     const touch = touchState || new TouchStartState(target);
-    target.addEventLisener('touchend', e => { if (new Date() - touch.start < 500) handler(e); }, listenerOptions);
+    target.addEventListener('touchend', e => { if (new Date() - touch.start < 500) handler(e); }, listenerOptions);
   }
 }
 
 function setMouseListener({ target, event, handler, listenerOptions }) {
-  if (mouseEventsMap[event]) target.addEventLisener(event, handler, listenerOptions);
+  if (mouseEventsMap[event]) target.addEventListener(event, handler, listenerOptions);
 }
 
 function setHybridListener({ target, event, handler, listenerOptions, touchState }) {
   setTouchListener({ target, event, handler, listenerOptions, touchState });
   if (mouseEventsMap[event]) {
-    target.addEventLisener(event, e => { if (new Date() - touchState.end > 600) handler(e); }, listenerOptions);
+    target.addEventListener(event, e => { if (new Date() - touchState.end > 600) handler(e); }, listenerOptions);
   }
 }
 
@@ -47,11 +47,11 @@ function setPointerListener({ target, event, handler, listenerOptions, pointerOp
     return undefined;
   }
   if (ptrMouseEvent === 'click' || ptrMouseEvent === 'dblclick') {
-    target.addEventLisener(ptrMouseEvent, handler, listenerOptions);
+    target.addEventListener(ptrMouseEvent, handler, listenerOptions);
   } else if (ptrMouseEvent) {
-    target.addEventLisener(ptrMouseEvent, e => { if (pointerType(e) === 'mouse') handler(e); }, listenerOptions);
+    target.addEventListener(ptrMouseEvent, e => { if (pointerType(e) === 'mouse') handler(e); }, listenerOptions);
   } else if (ptrTouchEvent) {
-    target.addEventLisener(ptrTouchEvent, e => { if (pointerType(e) === 'touch') handler(e); }, listenerOptions);
+    target.addEventListener(ptrTouchEvent, e => { if (pointerType(e) === 'touch') handler(e); }, listenerOptions);
   }
 }
 
