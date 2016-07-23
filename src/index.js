@@ -22,7 +22,7 @@ function setTouchListener({ target, event, handler, listenerOptions, touchState 
   if (touchEventsMap[event]) target.addEventLisener(event, handler, listenerOptions);
   else if (event === 'click') {
     const touch = touchState || new TouchStartState(target);
-    target.addEventLisener('touchend', e => { if (new Date() - touch.start < 500) handler(e); });
+    target.addEventLisener('touchend', e => { if (new Date() - touch.start < 500) handler(e); }, listenerOptions);
   }
 }
 
