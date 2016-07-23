@@ -3,5 +3,8 @@
   "extends": "airbnb-base",
   "env": {
     "browser": true
+  },
+  "rules": {
+    "max-len": ["error", 120]
   }
 }
