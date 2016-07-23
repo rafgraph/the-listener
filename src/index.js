@@ -5,7 +5,7 @@ import hasPassive from './detectPassiveSupport';
 function TouchState(target) {
   this.start = undefined;
   this.end = undefined;
-  this.touchActive = false;
+  this.active = false;
   const options = hasPassive ? { passive: true, capture: true } : true;
   target.addEventListener('touchstart', () => { this.start = new Date(); this.active = true; }, options);
   target.addEventListener('touchend', () => { this.end = new Date(); this.active = false; }, options);
@@ -33,7 +33,9 @@ function setMouseListener({ target, event, handler, listenerOptions }) {
 function setHybridListener({ target, event, handler, listenerOptions, touchState }) {
   setTouchListener({ target, event, handler, listenerOptions, touchState });
   if (mouseEventsMap[event]) {
-    target.addEventListener(event, e => { if (new Date() - touchState.end > 600) handler(e); }, listenerOptions);
+    target.addEventListener(
+      event, e => { if (!touchState.active && new Date() - touchState.end > 600) handler(e); }, listenerOptions
+    );
   }
 }
 
