@@ -24,11 +24,10 @@ function setPointerListener() {
 
 function getListenerType() {
   const dIt = detectIt;
-  const type = dIt.deviceType;
-  if (type === 'mouseOnly') return [setMouseListener, undefined];
-  if (type === 'touchOnly' && dIt.hasTouchEventsApi) return [setTouchListener, undefined];
-  if (type === 'hybrid' && dIt.hasTouchEventsApi) return [setHybridListener, new TouchState()];
-  if (dIt.hasTouch && dIt.hasPointerEventsApi) return [setPointerListener, undefined];
+  if (dIt.deviceType === 'mouseOnly') return setMouseListener;
+  if (dIt.deviceType === 'touchOnly' && dIt.hasTouchEventsApi) return setTouchListener;
+  if (dIt.deviceType === 'hybrid' && dIt.hasTouchEventsApi) return setHybridListener;
+  if (dIt.hasTouch && dIt.hasPointerEventsApi) return setPointerListener;
   return undefined;
 }
 
@@ -50,7 +49,8 @@ function parseKey(key) {
 
 
 export default function addListener(target, eventsAndHandlers, pointerOptions) {
-  const [setListener, touchState] = getListenerType();
+  const setListener = getListenerType();
+  const touchState = (setListener === setHybridListener ? new TouchState(target) : undefined);
   Object.keys(eventsAndHandlers).forEach(key => {
     const handler = eventsAndHandlers[key];
     const { events, listenerOptions } = parseKey(key);
