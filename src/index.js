@@ -6,8 +6,8 @@ function setTouchListener() {
 
 }
 
-function setMouseListener({ event, target, listenerOptions }) {
-  if (mouseEventsMap[event]) target.addEventLisener(event, listenerOptions);
+function setMouseListener({ target, event, handler, listenerOptions }) {
+  if (mouseEventsMap[event]) target.addEventLisener(event, handler, listenerOptions);
 }
 
 function setHybridListener() {
@@ -52,9 +52,10 @@ function parseKey(key) {
 export default function addListener(target, eventsAndHandlers, pointerOptions) {
   const [setListener, touchState] = getListenerType();
   Object.keys(eventsAndHandlers).forEach(key => {
+    const handler = eventsAndHandlers[key];
     const { events, listenerOptions } = parseKey(key);
     events.forEach(event => {
-      setListener({ event, target, listenerOptions, touchState, pointerOptions });
+      setListener({ target, event, handler, listenerOptions, touchState, pointerOptions });
     });
   });
 }
