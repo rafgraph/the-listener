@@ -64,7 +64,7 @@ function getListenerType() {
   if (dIt.deviceType === 'touchOnly' && dIt.hasTouchEventsApi) return setTouchListener;
   if (dIt.deviceType === 'hybrid' && dIt.hasTouchEventsApi) return setHybridListener;
   if (dIt.hasTouch && dIt.hasPointerEventsApi) return setPointerListener;
-  return undefined;
+  return function cantSetListeners() {};
 }
 
 function getListenerOptions(passive, capture) {
