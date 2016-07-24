@@ -1,6 +1,6 @@
 # The Listener
 
-Set listeners for mouse, touch and pointer events. Pass in a DOM object along with the mouse and touch event handlers, and `the-listener` will only set listeners for the events that correspond to the device's capabilities, and will automatically set pointer event listeners if needed (uses [`detect-it`](https://github.com/rafrex/detect-it) to determine device capabilities).
+Set listeners for mouse, touch and pointer events. Pass in an EventTarget along with the mouse and touch event handlers, and `the-listener` will only set listeners for the events that correspond to the device's capabilities, and will automatically set pointer event listeners if needed (uses [`detect-it`](https://github.com/rafrex/detect-it) to determine device capabilities).
 
 - If it's a mouse only device, then only mouse event listeners are set.
 - If it's a touch only device, then only touch event listeners are set.
@@ -24,7 +24,7 @@ import addListener from 'the-listener';
  * addListener() sets listeners on the target
  * based on the options in eventsAndHandlers
  *
- * @param {DOM Object} target (required)
+ * @param {EventTarget} target (required)
  * @param {Object} eventsAndHandlers (required)
  * @param {Object} pointerOptions (optional)
  */
