@@ -18,8 +18,11 @@
   },
   "keywords": [
     "event listener",
-    "touch",
-    "mouse"
+    "touch events",
+    "pointer events",
+    "mouse events",
+    "mouse",
+    "touch"
   ],
   "author": "Rafael Pedicini <code@rafrex.com>",
   "license": "MIT",
