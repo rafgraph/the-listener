@@ -86,6 +86,9 @@ addListener(target2,
 );
 ```
 
+#### Real world example using `the-listener`
+- [`current-input`][currentInput] - detect the current input (mouse or touch) and fix the sticky hover problem on touch devices
+
 #### Notes
 - In the case of `click` events from touch interactions, the `click` event handlers will be called on `touchend` and not wait for the delayed click event to be fired (providing that `touchend` occurs within 500ms of `touchstart`, otherwise the `click` event handler won't be called at all - this is how modern mobile browsers work).
 
@@ -105,6 +108,7 @@ addListener(target2,
 The work put into `the-listener` was made much easier by the excellent suite of [touch/pointer tests and demos][touchTests] put together by [Patrick H. Lauke][patrickHLauke]
 
 [detectIt]: https://github.com/rafrex/detect-it
+[currentInput]: https://github.com/rafrex/current-input
 
 [passiveExplainer]: https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md
 
