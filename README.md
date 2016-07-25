@@ -1,6 +1,6 @@
 # The Listener
 
-Easily set listeners for mouse, touch and pointer events without conflicts. Pass in an `EventTarget` along with the mouse and touch event handlers, and `the-listener` will only set listeners for the events that correspond to the device's capabilities, and will automatically set pointer event listeners if needed (uses [`detect-it`][detectIt] to determine device capabilities).
+Easily set listeners for mouse, touch and pointer events without conflicts. Pass in an `EventTarget` along with the mouse and touch event handler functions, and `the-listener` will only set listeners for the events that correspond to the device's capabilities, and will automatically set pointer event listeners if needed (uses [`detect-it`][detectIt] to determine device capabilities).
 
 - If it's a mouse only device, then only mouse event listeners are set.
 - If it's a touch only device, then only touch event listeners are set.
