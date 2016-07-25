@@ -101,3 +101,9 @@ addListener(target2,
 - Set capture phase listeners by adding `capture` to the key string.
 
 - If there are multiple handlers for the same event, i.e. the same event appears in multiple keys of the `eventsAndHandlers` object, then `the-listener` will add multiple event listeners to the target for that event (and all the handlers will get called when the event fires).
+
+#### Thank you
+The work put into `the-listener` was made much easier by the excellent suite of [touch/pointer tests and demos][touchTests] put together by [Patrick H. Lauke][patrickHLauke]
+
+[touchTests]: https://patrickhlauke.github.io/touch/
+[patrickHLauke]: https://github.com/patrickhlauke
