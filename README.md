@@ -1,6 +1,6 @@
 # The Listener
 
-Set listeners for mouse, touch and pointer events. Pass in an EventTarget along with the mouse and touch event handlers, and `the-listener` will only set listeners for the events that correspond to the device's capabilities, and will automatically set pointer event listeners if needed (uses [`detect-it`](https://github.com/rafrex/detect-it) to determine device capabilities).
+Easily set listeners for mouse, touch and pointer events without conflicts. Pass in an `EventTarget` along with the mouse and touch event handlers, and `the-listener` will only set listeners for the events that correspond to the device's capabilities, and will automatically set pointer event listeners if needed (uses [`detect-it`](https://github.com/rafrex/detect-it) to determine device capabilities).
 
 - If it's a mouse only device, then only mouse event listeners are set.
 - If it's a touch only device, then only touch event listeners are set.
@@ -32,14 +32,14 @@ addListener(target, eventsAndHandlers, pointerOptions);
 ```
 ```javascript
 /*
- * object keys are the event types and options, and the values are the handlers
+ * object keys are the event types and options, and the values are the handlers,
  * if the same function should be called for multiple event types,
  * then set the key as a space separated string with the multiple event types
  */
 const eventsAndHandlers = {
-  'one or more events as space separated string': function(event) {...},
+  'one or more events and options as a space separated string': function handler(event) {...},
 
-  // handler will be called for both mousedown and touchstart events,
+  // handler function will be called for both mousedown and touchstart events,
   'mousedown touchstart': function(event) {...},
 
   // the click event handler is called for both mouse and touch 'clicks' without any delay
@@ -52,7 +52,7 @@ const eventsAndHandlers = {
   // add passive to the key string to set a passive event listener
   'touchmove passive': function(event) {...},
 
-  // can have multple handlers for the same event (e.g. a touchstart handler was also set above)
+  // can have multiple handlers for the same event (e.g. a touchstart handler was also set above)
   // and can set a listener with both capture and passive options
   'touchstart capture passive': function(event) {...}
 }
@@ -92,7 +92,7 @@ addListener(target2,
 
 - All mouse and touch event handlers are only called when the event is fired from the respective input. Even though the `mousedown` event is fired after a touch interaction, `the-listener` won't call the `mousedown` handler. For example, if you want a handler to be called on both `mousedown` and `touchstart` then you need to explicitly set both. The only exception is that `click` event handlers are called for both mouse and touch events.
 
-- `the-listener` never calls `preventDefault()`, so it won't effect anything else in your app (you can call `preventDefault()` in side of your handlers if desired).
+- `the-listener` never calls `preventDefault()`, so it won't effect anything else in your app (you can call `preventDefault()` inside of your handlers if desired).
 
 - Pointer event listeners are only set when the device is touch capable but doesn't support the touch events api. In this case, pointer event listeners are set instead of mouse and touch event listeners (in all other cases, even if the device supports pointer events, only mouse and touch event listeners are set). Note that if the `pointerType` is `pen` or `touch` then the touch event handler will be called, and if the `pointerType` is `mouse` then the mouse event handler will be called. If you don't want a specific type of pointer event listener to be set, e.g. `pointermove`, then add a `pointerOptions` object (with `pointermove: false`) as the third argument to the `addListener()` function. Note that the corresponding mouse event listener will not be set, e.g. the `mousemove` listener will not be set.
 
