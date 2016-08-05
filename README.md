@@ -53,7 +53,12 @@ const eventsAndHandlers = {
 
   // can have multiple handlers for the same event (e.g. a touchstart handler was also set above)
   // and can set a listener with both capture and passive options
-  'touchstart capture passive': function(event) {...}
+  'touchstart capture passive': function(event) {...},
+
+  // to set a non touch or mouse listener, add the force set option
+  // forceSetMouse sets the listener(s) on mouseOnly and hybrid devices
+  // forceSetTouch sets the listener(s) on touchOnly and hybrid devices
+  'scroll capture passive forceSetMouse forceSetTouch': function(event) {...},
 }
 
 // prevent pointermove listener from being set, will still set other pointer listeners
@@ -101,6 +106,8 @@ addListener(target2,
 - Set passive event listeners by adding `passive` to the key string. Not all browsers support passive event listeners and `the-listener` will only set a listener as passive if the browser supports it, otherwise the listener will be set as a normal listener. See the [passive event listener explainer][passiveExplainer] for more information.
 
 - Set capture phase listeners by adding `capture` to the key string.
+
+- Set non touch and mouse event listeners by adding `forceSetMouse` and/or `forceSetTouch` to the key string. Without the force set option, if the event is not a recognized mouse or touch event then a listener is not set. `forceSetMouse` will set a listener on mouseOnly and hybrid devices. `forceSetTouch` will set a listener on touchOnly and hybrid devices. If both are present, then `the-listener` will set a listener on all devices (it will only be set once on hybrid devices).
 
 - If there are multiple handlers for the same event, i.e. the same event appears in multiple keys of the `eventsAndHandlers` object, then `the-listener` will add multiple event listeners to the target for that event (and all the handlers will get called when the event fires).
 
