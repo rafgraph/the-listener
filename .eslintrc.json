@@ -5,6 +5,7 @@
     "browser": true
   },
   "rules": {
-    "max-len": ["error", 120]
+    "max-len": ["error", 120],
+    "no-unused-expressions": ["error", { "allowShortCircuit": true, "allowTernary": true }]
   }
 }
