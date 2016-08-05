@@ -15,9 +15,9 @@ function TouchState(target) {
   this.end = undefined;
   this.active = false;
   const options = hasPassive ? { passive: true, capture: true } : true;
-  target.addEventListener('touchstart', () => { this.start = new Date(); this.active = true; }, options);
-  target.addEventListener('touchend', () => { this.end = new Date(); this.active = false; }, options);
-  target.addEventListener('touchcancel', () => { this.end = new Date(); this.active = false; }, options);
+  target.addEventListener('touchstart', () => { this.start = Date.now(); this.active = true; }, options);
+  target.addEventListener('touchend', () => { this.end = Date.now(); this.active = false; }, options);
+  target.addEventListener('touchcancel', () => { this.end = Date.now(); this.active = false; }, options);
 }
 
 /**
@@ -31,7 +31,7 @@ function TouchState(target) {
 function TouchStartState(target) {
   this.start = undefined;
   const options = hasPassive ? { passive: true, capture: true } : true;
-  target.addEventListener('touchstart', () => { this.start = new Date(); }, options);
+  target.addEventListener('touchstart', () => { this.start = Date.now(); }, options);
 }
 
 /**
@@ -52,7 +52,7 @@ function setTouchListener({ target, event, handler, listenerOptions, touchState 
   else if (event === 'click') {
     // if no touchState, then create a new TouchStartState to keep track last touchstart time for 500ms click cutoff
     const touch = touchState || new TouchStartState(target);
-    target.addEventListener('touchend', e => { if (new Date() - touch.start < 500) handler(e); }, listenerOptions);
+    target.addEventListener('touchend', e => { if (Date.now() - touch.start < 500) handler(e); }, listenerOptions);
   }
 }
 
@@ -96,7 +96,7 @@ function setHybridListener({ target, event, handler, listenerOptions, touchState
        * events will fire before touchend while actively touching the screen, so also need
        * to makes sure not in the touch active state.
        */
-      event, e => { if (!touchState.active && new Date() - touchState.end > 600) handler(e); }, listenerOptions
+      event, e => { if (!touchState.active && Date.now() - touchState.end > 600) handler(e); }, listenerOptions
     );
   }
 }
