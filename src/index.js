@@ -44,7 +44,7 @@ function TouchStartState(target) {
  *   @param {Object or Boolean} listenerOptions
  *   @param {TouchState} touchState (optional)
  */
-function setTouchListener({ target, event, handler, listenerOptions, touchState }) {
+function setTouchListener({ target, event, handler, listenerOptions, touchState, force }) {
   // if the event is a known touch event, then set event listener
   if (touchEventsMap[event]) target.addEventListener(event, handler, listenerOptions);
 
@@ -53,6 +53,8 @@ function setTouchListener({ target, event, handler, listenerOptions, touchState 
     // if no touchState, then create a new TouchStartState to keep track last touchstart time for 500ms click cutoff
     const touch = touchState || new TouchStartState(target);
     target.addEventListener('touchend', e => { (Date.now() - touch.start < 500) && handler(e); }, listenerOptions);
+  } else if (force && force.forceSetTouch) {
+    target.addEventListener(event, handler, listenerOptions);
   }
 }
 
@@ -66,9 +68,9 @@ function setTouchListener({ target, event, handler, listenerOptions, touchState 
  *   @param {Function} handler
  *   @param {Object or Boolean} listenerOptions
  */
-function setMouseListener({ target, event, handler, listenerOptions }) {
+function setMouseListener({ target, event, handler, listenerOptions, force }) {
   // if the event is a known mouse event, then set the listener
-  if (mouseEventsMap[event]) target.addEventListener(event, handler, listenerOptions);
+  if (mouseEventsMap[event] || (force && force.forceSetMouse)) target.addEventListener(event, handler, listenerOptions);
 }
 
 /**
@@ -81,7 +83,7 @@ function setMouseListener({ target, event, handler, listenerOptions }) {
  *   @param {Object or Boolean} listenerOptions
  *   @param {TouchState} touchState
  */
-function setHybridListener({ target, event, handler, listenerOptions, touchState }) {
+function setHybridListener({ target, event, handler, listenerOptions, touchState, force }) {
   // set touch listener
   setTouchListener({ target, event, handler, listenerOptions, touchState });
 
@@ -98,6 +100,8 @@ function setHybridListener({ target, event, handler, listenerOptions, touchState
        */
       event, e => { (!touchState.active && Date.now() - touchState.end > 600) && handler(e); }, listenerOptions
     );
+  } else if (force && (force.forceSetMouse || force.forceSetTouch)) {
+    target.addEventListener(event, handler, listenerOptions);
   }
 }
 
@@ -111,7 +115,7 @@ function setHybridListener({ target, event, handler, listenerOptions, touchState
  *   @param {Object or Boolean} listenerOptions
  *   @param {Object} pointerOptions
  */
-function setPointerListener({ target, event, handler, listenerOptions, pointerOptions }) {
+function setPointerListener({ target, event, handler, listenerOptions, pointerOptions, force }) {
   /**
    * look up the pointer event that corresponds to the event argument (which is a mouse or touch event),
    * note that at least one of ptrTouchEvent and ptrMouseEvent will be undefined
@@ -147,6 +151,8 @@ function setPointerListener({ target, event, handler, listenerOptions, pointerOp
     target.addEventListener(
       pfix(ptrTouchEvent), e => { (pointerType[e.pointerType] === 'touch') && handler(e); }, listenerOptions
     );
+  } else if (force && (force.forceSetMouse || force.forceSetTouch)) {
+    target.addEventListener(event, handler, listenerOptions);
   }
 }
 
@@ -188,12 +194,17 @@ function getListenerOptions(passive, capture) {
  */
 function parseKey(key) {
   const eventsAndOptions = key.split(' ');
+  const optionsList = { passive: 1, capture: 1, forceSetMouse: 1, forceSetTouch: 1 };
   return {
-    events: eventsAndOptions.filter(value => value !== 'passive' && value !== 'capture'),
+    events: eventsAndOptions.filter(value => !optionsList[value]),
     listenerOptions: getListenerOptions(
       eventsAndOptions.indexOf('passive') !== -1,
       eventsAndOptions.indexOf('capture') !== -1
     ),
+    force: {
+      forceSetMouse: eventsAndOptions.indexOf('forceSetMouse') !== -1,
+      forceSetTouch: eventsAndOptions.indexOf('forceSetTouch') !== -1,
+    },
   };
 }
 
@@ -214,9 +225,9 @@ export default function addListener(target, eventsAndHandlers, pointerOptions) {
   // parse the eventsAndHandlers object one key at a time
   Object.keys(eventsAndHandlers).forEach(key => {
     const handler = eventsAndHandlers[key];
-    const { events, listenerOptions } = parseKey(key);
+    const { events, listenerOptions, force } = parseKey(key);
     events.forEach(event => {
-      setListener({ target, event, handler, listenerOptions, touchState, pointerOptions });
+      setListener({ target, event, handler, listenerOptions, touchState, pointerOptions, force });
     });
   });
 }
