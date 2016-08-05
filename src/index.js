@@ -52,7 +52,7 @@ function setTouchListener({ target, event, handler, listenerOptions, touchState 
   else if (event === 'click') {
     // if no touchState, then create a new TouchStartState to keep track last touchstart time for 500ms click cutoff
     const touch = touchState || new TouchStartState(target);
-    target.addEventListener('touchend', e => { if (Date.now() - touch.start < 500) handler(e); }, listenerOptions);
+    target.addEventListener('touchend', e => { (Date.now() - touch.start < 500) && handler(e); }, listenerOptions);
   }
 }
 
@@ -96,7 +96,7 @@ function setHybridListener({ target, event, handler, listenerOptions, touchState
        * events will fire before touchend while actively touching the screen, so also need
        * to makes sure not in the touch active state.
        */
-      event, e => { if (!touchState.active && Date.now() - touchState.end > 600) handler(e); }, listenerOptions
+      event, e => { (!touchState.active && Date.now() - touchState.end > 600) && handler(e); }, listenerOptions
     );
   }
 }
@@ -140,12 +140,12 @@ function setPointerListener({ target, event, handler, listenerOptions, pointerOp
   } else if (ptrMouseEvent) {
     // if the event is a mouse event, then set pointer listener and only call the handler if pointType is a mouse
     target.addEventListener(
-      pfix(ptrMouseEvent), e => { if (pointerType[e.pointerType] === 'mouse') handler(e); }, listenerOptions
+      pfix(ptrMouseEvent), e => { (pointerType[e.pointerType] === 'mouse') && handler(e); }, listenerOptions
     );
   } else if (ptrTouchEvent) {
     // if the event is a touch event, then set pointer listener and only call handler if pointType is touch or pen
     target.addEventListener(
-      pfix(ptrTouchEvent), e => { if (pointerType[e.pointerType] === 'touch') handler(e); }, listenerOptions
+      pfix(ptrTouchEvent), e => { (pointerType[e.pointerType] === 'touch') && handler(e); }, listenerOptions
     );
   }
 }
