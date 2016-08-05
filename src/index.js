@@ -122,18 +122,14 @@ function setPointerListener({ target, event, handler, listenerOptions, pointerOp
   // early return w/o setting a listener if pointerOptions says don't set listener for this specific pointer event
   if (pointerOptions && (pointerOptions[ptrTouchEvent] === false || pointerOptions[ptrMouseEvent] === false)) return;
 
-  /**
-   * pointerType() returns the input type that created the event (mouse or touch),
-   * note that a pen pointer will be mapped to a touch input type
-   *
-   * @param {Event} e
-   * @return {String} 'mouse' or 'touch'
-   */
-  function pointerType(e) {
-    if (['touch', 2, 'pen', 3].indexOf(e.pointerType) !== -1) return 'touch';
-    if (['mouse', 4].indexOf(e.pointerType) !== -1) return 'mouse';
-    return undefined;
-  }
+  const pointerType = {
+    touch: 'touch',
+    2: 'touch',
+    pen: 'touch',
+    3: 'touch',
+    mouse: 'mouse',
+    4: 'mouse',
+  };
 
   // access prefix function for pointer events
   const pfix = detectIt.pointerEventsPrefix;
@@ -143,10 +139,14 @@ function setPointerListener({ target, event, handler, listenerOptions, pointerOp
     target.addEventListener(ptrMouseEvent, handler, listenerOptions);
   } else if (ptrMouseEvent) {
     // if the event is a mouse event, then set pointer listener and only call the handler if pointType is a mouse
-    target.addEventListener(pfix(ptrMouseEvent), e => { if (pointerType(e) === 'mouse') handler(e); }, listenerOptions);
+    target.addEventListener(
+      pfix(ptrMouseEvent), e => { if (pointerType[e.pointerType] === 'mouse') handler(e); }, listenerOptions
+    );
   } else if (ptrTouchEvent) {
     // if the event is a touch event, then set pointer listener and only call handler if pointType is touch or pen
-    target.addEventListener(pfix(ptrTouchEvent), e => { if (pointerType(e) === 'touch') handler(e); }, listenerOptions);
+    target.addEventListener(
+      pfix(ptrTouchEvent), e => { if (pointerType[e.pointerType] === 'touch') handler(e); }, listenerOptions
+    );
   }
 }
 
