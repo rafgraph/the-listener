@@ -55,10 +55,15 @@ const eventsAndHandlers = {
   // and can set a listener with both capture and passive options
   'touchstart capture passive': function(event) {...},
 
-  // to set a non touch or mouse listener, add the force set option
-  // forceSetMouse sets the listener(s) on mouseOnly and hybrid devices
-  // forceSetTouch sets the listener(s) on touchOnly and hybrid devices
-  'scroll capture passive forceSetMouse forceSetTouch': function(event) {...},
+  // can set non mouse or touch listeners, by default they are set on all devices
+  'focus passive': function(event) {...}
+
+  // to set listeners selectively, add the setWith[Type] option,
+  // which can be one of three values, setWithMouse, setWithTouch or setWithHybrid,
+  // mouse and touch options will set listener if the device has mouse or has touch (includes hybrids)
+  // hybrid option will only set listener on hybrid devices
+  'scroll capture passive setWithMouse': function(event) {...},
+  'touchstart passive setWithHybrid': function(event) {...},
 }
 
 // prevent pointermove listener from being set, will still set other pointer listeners
@@ -107,7 +112,9 @@ addListener(target2,
 
 - Set capture phase listeners by adding `capture` to the key string.
 
-- Set non touch and mouse event listeners by adding `forceSetMouse` and/or `forceSetTouch` to the key string. Without the force set option, if the event is not a recognized mouse or touch event then a listener is not set. `forceSetMouse` will set a listener on mouseOnly and hybrid devices. `forceSetTouch` will set a listener on touchOnly and hybrid devices. If both are present, then `the-listener` will set a listener on all devices (it will only be set once on hybrid devices).
+- Can set non mouse or touch event listeners, e.g. a `scroll` event listener, and by default they are set on all devices. Note that anything that is not recognized as a mouse or touch event, or as an option, is passed through to set a listener, whether or not it is an actual event type, e.g. you could add a listener for a `foo` event.
+
+- To set listeners selectively, add the setWith[Type] option to the key string, which can be one of three values `setWithMouse`, `setWithTouch` or `setWithHybrid`. For `setWithMouse` and `setWithTouch`, the listeners will be set if the device has mouse or has touch capabilities, which includes hybrid devices. For `setWithHybrid`, the listeners will only be set on hybrid devices.
 
 - If there are multiple handlers for the same event, i.e. the same event appears in multiple keys of the `eventsAndHandlers` object, then `the-listener` will add multiple event listeners to the target for that event (and all the handlers will get called when the event fires).
 
