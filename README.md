@@ -102,7 +102,7 @@ addListener(target2,
 #### Notes
 - In the case of `click` events from touch interactions, the `click` event handlers will be called on `touchend` and not wait for the delayed click event to be fired (providing that `touchend` occurs within 500ms of `touchstart`, otherwise the `click` event handler won't be called at all - this is how modern mobile browsers work).
 
-- All mouse and touch event handlers are only called when the event is fired from the respective input. Even though the `mousedown` event is fired after a touch interaction, `the-listener` won't call the `mousedown` handler. For example, if you want a handler to be called on both `mousedown` and `touchstart` then you need to explicitly set both. The only exception is that `click` event handlers are called for both mouse and touch events.
+- All mouse and touch event handlers are only called when the event is fired from the respective input. For example, even though the `mousedown` event is fired after a touch interaction, `the-listener` won't call the `mousedown` handler. If you want a handler to be called on both `mousedown` and `touchstart` then you need to explicitly set both. The only exception is that `click` event handlers are called for both mouse and touch events.
 
 - `the-listener` never calls `preventDefault()`, so it won't effect anything else in your app (you can call `preventDefault()` inside of your handlers if desired).
 
