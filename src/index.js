@@ -21,20 +21,6 @@ function TouchState(target) {
 }
 
 /**
- * TouchStartState() constructor keeps track of only the touch start state for a target,
- * the time of the last touchstart - this is used instead of TouchState when handling click
- * events on a touchOnly device because no need to also track touchend time and touch active state
- *
- * @param {EventTarget}  target
- * @return {TouchStartState}
- */
-function TouchStartState(target) {
-  this.start = undefined;
-  const options = hasPassive ? { passive: true, capture: true } : true;
-  target.addEventListener('touchstart', () => { this.start = Date.now(); }, options);
-}
-
-/**
  * setTouchListener() sets a single touch listener for a specific target and event
  *
  * @param {Object}
@@ -52,9 +38,16 @@ function setTouchListener({ target, event, handler, listenerOptions, touchState,
 
   // if the event is a click event, then call the handler on touchend if within 500ms of touchstart
   else if (event === 'click') {
-    // if no touchState, then create a new TouchStartState to keep track last touchstart time for 500ms click cutoff
-    const touch = touchState || new TouchStartState(target);
+    // if touchState not passed in, then create a new touchState
+    const touch = touchState || new TouchState(target);
     target.addEventListener('touchend', e => { (Date.now() - touch.start < 500) && handler(e); }, listenerOptions);
+
+    // if it's a touch only device, still listen for click events that are fired synthetically, e.g. assistive tech
+    if (detectIt.deviceType === 'touchOnly') {
+      target.addEventListener(
+        'click', e => { (!touch.active && Date.now() - touch.end > 600) && handler(e); }, listenerOptions
+      );
+    }
   } else if (!mouseEventsMap[event] || setWith === 'setWithTouch') {
     target.addEventListener(event, handler, listenerOptions);
   }
