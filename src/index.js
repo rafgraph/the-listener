@@ -14,10 +14,14 @@ function TouchState(target) {
   this.start = undefined;
   this.end = undefined;
   this.active = false;
+  function endTouch() {
+    this.end = Date.now();
+    this.active = false;
+  }
   const options = hasPassive ? { passive: true, capture: true } : true;
   target.addEventListener('touchstart', () => { this.start = Date.now(); this.active = true; }, options);
-  target.addEventListener('touchend', () => { this.end = Date.now(); this.active = false; }, options);
-  target.addEventListener('touchcancel', () => { this.end = Date.now(); this.active = false; }, options);
+  target.addEventListener('touchend', (e) => { (e.targetTouches.length === 0) && endTouch(); }, options);
+  target.addEventListener('touchcancel', (e) => { (e.targetTouches.length === 0) && endTouch(); }, options);
 }
 
 /**
