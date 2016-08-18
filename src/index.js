@@ -186,6 +186,22 @@ function getListenerOptions(passive, capture) {
 }
 
 /**
+ * getSetWith() returns the setWith option based on the options present in the key string
+ *
+ * @param {Boolean} setWithMouse
+ * @param {Boolean} setWithTouch
+ * @param {Boolean} setWithHybrid
+ * @return {String or undefined} setWith event listener option
+ */
+function getSetWith(setWithMouse, setWithTouch, setWithHybrid) {
+  if (setWithMouse && setWithTouch) return undefined;
+  if (setWithMouse) return 'setWithMouse';
+  if (setWithTouch) return 'setWithTouch';
+  if (setWithHybrid) return 'setWithHybrid';
+  return undefined;
+}
+
+/**
  * parseKey() parses the key, which is a space separated string with events and options,
  * and returns an object with events in an array and listenerOptions as either
  * a boolean or an object (see getListenerOptions())
@@ -202,11 +218,11 @@ function parseKey(key) {
       eventsAndOptions.indexOf('passive') !== -1,
       eventsAndOptions.indexOf('capture') !== -1
     ),
-    setWith:
-      (eventsAndOptions.indexOf('setWithHybrid') !== -1 && 'setWithHybrid') ||
-      (eventsAndOptions.indexOf('setWithMouse') !== -1 && 'setWithMouse') ||
-      (eventsAndOptions.indexOf('setWithTouch') !== -1 && 'setWithTouch') ||
-      undefined,
+    setWith: getSetWith(
+      eventsAndOptions.indexOf('setWithMouse') !== -1,
+      eventsAndOptions.indexOf('setWithTouch') !== -1,
+      eventsAndOptions.indexOf('setWithHybrid') !== -1
+    ),
   };
 }
 
