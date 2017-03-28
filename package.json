@@ -39,6 +39,6 @@
     "webpack": "^1.13.1"
   },
   "dependencies": {
-    "detect-it": "^1.0.0"
+    "detect-it": "^1.1.0"
   }
 }

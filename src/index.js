@@ -1,6 +1,5 @@
 import detectIt from 'detect-it';
 import { mouseEventsMap, touchEventsMap } from './eventMaps';
-import hasPassive from './detectPassiveSupport';
 
 /**
  * TouchState() constructor keeps track of the touch state for a target:
@@ -14,7 +13,7 @@ function TouchState(target) {
   this.start = undefined;
   this.end = undefined;
   this.active = false;
-  const options = hasPassive ? { passive: true, capture: true } : true;
+  const options = detectIt.passiveEvents ? { passive: true, capture: true } : true;
   target.addEventListener('touchstart', () => { this.start = new Date(); this.active = true; }, options);
   target.addEventListener('touchend', () => { this.end = new Date(); this.active = false; }, options);
   target.addEventListener('touchcancel', () => { this.end = new Date(); this.active = false; }, options);
@@ -30,7 +29,7 @@ function TouchState(target) {
  */
 function TouchStartState(target) {
   this.start = undefined;
-  const options = hasPassive ? { passive: true, capture: true } : true;
+  const options = detectIt.passiveEvents ? { passive: true, capture: true } : true;
   target.addEventListener('touchstart', () => { this.start = new Date(); }, options);
 }
 
@@ -174,7 +173,7 @@ function getListenerType() {
  * @return {Object or Boolean} addEventListener options argument
  */
 function getListenerOptions(passive, capture) {
-  if (!passive || !hasPassive) return capture;
+  if (!passive || !detectIt.passiveEvents) return capture;
   return { capture, passive };
 }
 
