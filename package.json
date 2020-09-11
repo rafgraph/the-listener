@@ -1,6 +1,6 @@
 {
   "name": "the-listener",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Set listeners for mouse, touch and pointer events without conflicts",
   "main": "lib/index.js",
   "scripts": {
