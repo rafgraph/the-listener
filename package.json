@@ -14,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rafrex/the-listener.git"
+    "url": "git+https://github.com/rafgraph/the-listener.git"
   },
   "keywords": [
     "event listener",
@@ -24,12 +24,12 @@
     "mouse",
     "touch"
   ],
-  "author": "Rafael Pedicini <code@rafrex.com>",
+  "author": "Rafael Pedicini <rafael@rafgraph.dev>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/rafrex/the-listener/issues"
+    "url": "https://github.com/rafgraph/the-listener/issues"
   },
-  "homepage": "https://github.com/rafrex/the-listener#readme",
+  "homepage": "https://github.com/rafgraph/the-listener#readme",
   "devDependencies": {
     "babel-cli": "^6.11.4",
     "babel-preset-es2015": "^6.9.0",

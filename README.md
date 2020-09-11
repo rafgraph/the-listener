@@ -6,7 +6,7 @@ Easily set listeners for mouse, touch and pointer events without conflicts. Pass
 - If it's a touch only device, then only touch event listeners are set.
 - If it is a hybrid device, then both mouse and touch event listeners are set, but the mouse event handlers are only called when no touch event is fired (touch interactions fire both mouse and touch events, which is one of the problems that `the-listener` solves).
 - If a device is touch capable but only supports pointer events, then the corresponding pointer event listeners are automatically set instead of mouse and touch event listeners (this behavior can be prevented if desired).
-- Note that there are edge cases where the user can change the input type mid-session (e.g. add a mouse to a touch device, or add a touch screen to mouse device), in which case the user would need to reload the page or restart to the browser to update `the-listener`, see [this comment](https://github.com/rafrex/the-listener/issues/1#issue-212000437) for more info.
+- Note that there are edge cases where the user can change the input type mid-session (e.g. add a mouse to a touch device, or add a touch screen to mouse device), in which case the user would need to reload the page or restart to the browser to update `the-listener`, see [this comment](https://github.com/rafgraph/the-listener/issues/1#issue-212000437) for more info.
 
 
 ### Installing `the-listener`
@@ -108,8 +108,8 @@ addListener(target2,
 #### Thank you
 The work put into `the-listener` was made much easier by the excellent suite of [touch/pointer tests and demos][touchTests] put together by [Patrick H. Lauke][patrickHLauke]
 
-[detectIt]: https://github.com/rafrex/detect-it
-[currentInput]: https://github.com/rafrex/current-input
+[detectIt]: https://github.com/rafgraph/detect-it
+[currentInput]: https://github.com/rafgraph/current-input
 
 [passiveExplainer]: https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md
 
